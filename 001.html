@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Number guessing game</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Number guessing game</h1>
+
+    <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+
+    <div class="form">
+      <label for="guessField">Enter a guess: </label><input type="text" id="guessField" class="guessField">
+      <input type="submit" value="Submit guess" class="guessSubmit">
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+    /*//生成1到100之间的随机数。
+记录玩家在第几轮。从1开始。
+ 为玩家提供一种猜测数字的方法。
+ 一旦提交了猜测，首先将它记录在某处，以便用户可以看到他们先前的猜测。
+接下来检查它是否是正确的数字。
+如果是正确的：
+显示祝贺消息。
+阻止玩家输入更多的猜测（这会使游戏混乱）。
+显示控制允许玩家重新开始游戏。
+如果它错了，并且玩家有剩余轮次：
+告诉玩家他们错了。
+允许他们输入另一个猜测。
+将圈数增加1。
+如果它是错误的，并且玩家没有剩余轮次：
+告诉玩家游戏结束。
+阻止玩家输入更多的猜测（这会使游戏混乱）。
+显示控制允许玩家重新开始游戏。
+一旦游戏重新启动，请确保游戏逻辑和用户界面完全重置，然后返回步骤1。*/
+      // Your JavaScript goes here
+ var randomNumber = Math.floor(Math.random() * 100) + 1;
+//Math.random()产生的是0-1之间的随机数,但不包含0和1.
+//所以 +1；  math.floor()取整
+var guesses = document.querySelector('.guesses');
+var lastResult = document.querySelector('.lastResult');
+var lowOrHi = document.querySelector('.lowOrHi');
+
+var guessSubmit = document.querySelector('.guessSubmit');
+var guessField = document.querySelector('.guessField');
+
+var guessCount = 1;
+var resetButton;
+function checkGuess() {
+
+  var userGuess = Number(guessField.value);
+  if (guessCount === 1) {
+    guesses.textContent = 'Previous guesses: ';
+  }
+  guesses.textContent += userGuess + ' ';
+ 
+  if (userGuess === randomNumber) {
+    lastResult.textContent = 'Congratulations! You got it right!';
+    lastResult.style.backgroundColor = 'green';
+    lowOrHi.textContent = '';
+    setGameOver();
+  } else if (guessCount === 10) {
+    lastResult.textContent = '!!!GAME OVER!!!';
+    setGameOver();
+  } else {
+    lastResult.textContent = 'Wrong!';
+    lastResult.style.backgroundColor = 'red';
+    if(userGuess < randomNumber) {
+      lowOrHi.textContent = 'Last guess was too low!';
+    } else if(userGuess > randomNumber) {
+      lowOrHi.textContent = 'Last guess was too high!';
+    }
+  }
+ 
+  guessCount++;
+  guessField.value = '';  //文本清空
+  guessField.focus();    //重新回到焦点文本段，准备下一轮游戏
+}
+guessSubmit.addEventListener('click', checkGuess);
+
+
+function setGameOver() {
+  guessField.disabled = true; //禁止输入
+  guessSubmit.disabled = true;//禁止按钮
+  resetButton = document.createElement('button');//创建按钮
+  resetButton.textContent = 'Start new game';  
+  document.body.appendChild(resetButton);
+  resetButton.addEventListener('click', resetGame);
+}
+function resetGame() {
+  guessCount = 1;
+
+  var resetParas = document.querySelectorAll('.resultParas p');
+  for (var i = 0 ; i < resetParas.length ; i++) {
+    resetParas[i].textContent = '';  //清空之前记录
+  }
+
+  resetButton.parentNode.removeChild(resetButton); 
+
+  guessField.disabled = false;
+  guessSubmit.disabled = false;
+  guessField.value = '';
+  guessField.focus();
+
+  lastResult.style.backgroundColor = 'white';
+
+  randomNumber = Math.floor(Math.random() * 100) + 1;
+}
+    </script>
+
+    <script>
+document.write("<h5>三元运算:</h5>");
+document.write("function(int i)<br>{return i<10?i*100:i*10;}<br>");
+document.write("<br>转化为:<br>function(int i)<br>{if(i<10)  return i*100;return i*10;}<br>就是(expr1) ? (expr2) : (expr3);<br>解释：如果条件expr1成立，则执行语句expr2，否则执行expr3。");      
+document.write("<h4>一元运算:</h4>");
+document.write ("typeof(1): "+typeof(1)+"<br>");
+document.write ("typeof(NaN): "+typeof(NaN)+"<br>");
+document.write ("typeof(Number.MIN_VALUE): "+typeof(Number.MIN_VALUE)+"<br>")
+document.write ("typeof(Infinity): "+typeof(Infinity)+"<br>")
+document.write ("typeof(\"123\"): "+typeof("123")+"<br>")
+document.write ("typeof(true): "+typeof(true)+"<br>")
+document.write ("typeof(window): "+typeof(window)+"<br>")
+document.write ("typeof(document): "+typeof(document)+"<br>")
+document.write ("typeof(null): "+typeof(null)+"<br>")
+document.write ("typeof(eval): "+typeof(eval)+"<br>")
+document.write ("typeof(Date): "+typeof(Date)+"<br>")
+document.write ("typeof(sss): "+typeof(sss)+"<br>")
+document.write ("typeof(undefined): "+typeof(undefined)+"<br>")
+</script>
+  </body>
+</html>
